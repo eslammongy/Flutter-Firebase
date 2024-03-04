@@ -1,0 +1,172 @@
+import 'package:sizer/sizer.dart';
+import 'package:pinput/pinput.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firebase/helper/helper.dart';
+import 'package:flutter_firebase/utils/user_pref.dart';
+import 'package:flutter_firebase/utils/app_routes.dart';
+import 'package:flutter_firebase/helper/app_assets.dart';
+import 'package:flutter_firebase/signin/presentation/viewModel/userInfo/user_info_cubit.dart';
+import 'package:flutter_firebase/signin/presentation/viewModel/phoneAuth/phone_auth_cubit.dart';
+
+class VerificationOtpScreen extends StatelessWidget {
+  final String verifyId;
+
+  const VerificationOtpScreen({
+    Key? key,
+    required this.verifyId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final pinController = TextEditingController();
+    final focusNode = FocusNode();
+    final formKey = GlobalKey<FormState>();
+    final theme = Theme.of(context);
+
+    return BlocConsumer<UserInfoCubit, UserInfoState>(
+      listener: (context, state) async {
+        if (state is UserInfoSuccessfulState) {
+          await UserPref.saveUserInfoLocally(userModel: state.userModel)
+              .then((value) {
+            GoRouter.of(context).pushReplacement(AppRouter.dashboardScreen,
+                extra: UserInfoCubit.get(context).userModel);
+          });
+        }
+        if (state is UserInfoFailureState) {
+          Future(() {
+            GoRouter.of(context).pop();
+            displaySnackBar(context, state.errorMsg);
+          });
+        }
+      },
+      builder: (context, state) {
+        PhoneAuthCubit.get(context).verificationId = verifyId;
+
+        final PinTheme defaultPinTheme = PinTheme(
+          width: 56,
+          height: 56,
+          textStyle: TextStyle(
+            fontSize: 22,
+            color: theme.scaffoldBackgroundColor,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.w),
+            border:
+                Border.all(color: theme.scaffoldBackgroundColor, width: 1.5),
+          ),
+        );
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.w),
+              child: Column(
+                children: [
+                  SizedBox(height: 5.h),
+                  Text(
+                    "Verification",
+                    textAlign: TextAlign.center,
+                    style:
+                        theme.textTheme.displaySmall,
+                  ),
+                  Text(
+                    "Code",
+                    textAlign: TextAlign.center,
+                    style:
+                          theme.textTheme.displaySmall,
+                  ),
+                  SizedBox(
+                      width: 90.w,
+                      height: 30.h,
+                      child: Image.asset(
+                        AppAssetsManager.otpScreenImage,
+                        fit: BoxFit.cover,
+                      )),
+                  SizedBox(height: 8.h),
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Pinput(
+                          controller: pinController,
+                          focusNode: focusNode,
+                          length: 6,
+                          androidSmsAutofillMethod:
+                              AndroidSmsAutofillMethod.smsUserConsentApi,
+                          listenForMultipleSmsOnAndroid: true,
+                          defaultPinTheme: defaultPinTheme,
+                          hapticFeedbackType: HapticFeedbackType.lightImpact,
+                          onCompleted: (code) {
+                            showLoadingDialog(context);
+                            PhoneAuthCubit.get(context)
+                                .submitOtbCode(code)
+                                .then((value) {
+                              UserInfoCubit.get(context).userModel =
+                                  PhoneAuthCubit.get(context).userModel;
+                            });
+                          },
+                          cursor: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 9),
+                                width: 22,
+                                height: 1,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ],
+                          ),
+                          focusedPinTheme: defaultPinTheme.copyWith(
+                            decoration: defaultPinTheme.decoration!.copyWith(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                          submittedPinTheme: defaultPinTheme.copyWith(
+                            decoration: defaultPinTheme.decoration!.copyWith(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(19),
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          errorPinTheme: defaultPinTheme.copyBorderWith(
+                            border: Border.all(color: theme.colorScheme.error),
+                          ),
+                        ),
+                        BlocListener<PhoneAuthCubit, PhoneAuthState>(
+                          listenWhen: (previous, current) {
+                            return previous != current;
+                          },
+                          listener: (context, state) async {
+                            if (state is PhoneOtpCodeVerified) {
+                              await UserInfoCubit.get(context)
+                                  .createNewUser(user: state.userModel);
+                            }
+                            if (state is PhoneAuthErrorOccurred) {
+                              Future(() {
+                                GoRouter.of(context).pop();
+                                displaySnackBar(context, state.message);
+                              });
+                            }
+                          },
+                          child: const SizedBox(),
+                        ),
+                        SizedBox(height: 10.h),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
