@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase/splash_screen.dart';
 import 'package:flutter_firebase/utils/user_pref.dart';
 import '../signin/presentation/views/signup_screen.dart';
 import 'package:flutter_firebase/signin/data/models/user_model.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_firebase/signin/data/repository/signin_repo.dart';
 import 'package:flutter_firebase/utils/services_locator.dart' as injectable;
 import 'package:flutter_firebase/signin/data/repository/phone_auth_repo.dart';
 import 'package:flutter_firebase/signin/presentation/views/login_screen.dart';
+import 'package:flutter_firebase/profile/presentation/views/profile_screen.dart';
 import 'package:flutter_firebase/signin/presentation/views/phone_auth_screen.dart';
 import 'package:flutter_firebase/signin/presentation/views/verification_otp_screen.dart';
 import 'package:flutter_firebase/signin/presentation/views/widgets/forget_password.dart';
@@ -21,18 +21,12 @@ abstract class AppRouter {
   static String forgetPasswordScreen = '/forgetPasswordScreen';
   static String phoneAuthScreen = '/phoneAuthScreen';
   static String verifyingPhoneScreen = '/verifyingPhoneScreen';
-  static String dashboardScreen = '/dashboardScreen';
-  static String taskDetailsScreen = '/taskDetailsScree';
-  static String taskScreen = '/taskScreen';
-  static String habitDetailsScreen = '/habitDetailsScreen';
-  static String budgetDetailsScreen = '/budgetDetailsScreen';
-  static String settingScreen = '/settingScreen';
   static String profileScreen = '/profileScreen';
-  static String searchScreen = '/searchScreen';
 
   static bool isUserLogin = false;
   static UserModel? currentUser;
   static setInitialRoute() async {
+    await UserPref.init();
     await UserPref.getUserInfoLocally().then((user) {
       isUserLogin = user?.name != null;
       currentUser = user;
@@ -47,7 +41,7 @@ abstract class AppRouter {
           if (isUserLogin) {
             return LoginScreen();
           } else {
-            return const SplashScreen();
+            return const ProfileScreen();
           }
         },
       ),

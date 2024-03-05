@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
         if (state is UserInfoSuccessfulState) {
           Future(() async {
             await UserPref.saveUserLoggedIn(isLogged: true).then((value) async {
-              GoRouter.of(context).pushReplacement(AppRouter.dashboardScreen);
+              GoRouter.of(context).pushReplacement(AppRouter.profileScreen);
             });
           });
         }
@@ -160,7 +160,7 @@ class LoginScreen extends StatelessWidget {
   Future<void> _saveUserInfoLocally(
       BuildContext context, UserModel userModel) async {
     await UserPref.saveUserInfoLocally(userModel: userModel).then((value) {
-      GoRouter.of(context).pushReplacement(AppRouter.dashboardScreen);
+      GoRouter.of(context).pushReplacement(AppRouter.profileScreen);
     });
   }
 

@@ -30,7 +30,7 @@ class VerificationOtpScreen extends StatelessWidget {
         if (state is UserInfoSuccessfulState) {
           await UserPref.saveUserInfoLocally(userModel: state.userModel)
               .then((value) {
-            GoRouter.of(context).pushReplacement(AppRouter.dashboardScreen,
+            GoRouter.of(context).pushReplacement(AppRouter.profileScreen,
                 extra: UserInfoCubit.get(context).userModel);
           });
         }
