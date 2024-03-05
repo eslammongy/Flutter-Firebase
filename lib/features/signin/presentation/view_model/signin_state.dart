@@ -1,41 +1,41 @@
 part of 'signin_cubit.dart';
 
-abstract class SignInState {}
+abstract class SignInStates {}
 
-class SignInInitial extends SignInState {}
+class SignInInitial extends SignInStates {}
 
-class SignInLoadingState extends SignInState {}
+class SignInLoadingState extends SignInStates {}
 
-class SignInSuccessState extends SignInState {
+class SignInSuccessState extends SignInStates {
   final UserModel userModel;
 
   SignInSuccessState({required this.userModel});
 }
 
-class SignUpUserSuccessState extends SignInState {
+class SignUpSuccessState extends SignInStates {
   final UserModel userModel;
 
-  SignUpUserSuccessState({required this.userModel});
+  SignUpSuccessState({required this.userModel});
 }
 
-class SignInWithGoogleSuccessState extends SignInState {
+class SignInWithGoogleSuccessState extends SignInStates {
   final UserModel userModel;
 
   SignInWithGoogleSuccessState({required this.userModel});
 }
 
-class SignInFailureState extends SignInState {
-  final String errorMsg;
+class ResetPasswordSuccessState extends SignInStates {}
 
-  SignInFailureState(this.errorMsg);
+class PhoneNumberSubmittedState extends SignInStates {}
+
+class PhoneOtpCodeVerifiedState extends SignInStates {
+  final UserModel userModel;
+
+  PhoneOtpCodeVerifiedState({required this.userModel});
 }
 
-class UserResetPasswordLoading extends SignInState {}
-
-class UserResetPasswordSuccess extends SignInState {}
-
-class UserResetPasswordError extends SignInState {
+class SignInGenericFailureState extends SignInStates {
   final String errorMsg;
 
-  UserResetPasswordError(this.errorMsg);
+  SignInGenericFailureState(this.errorMsg);
 }
