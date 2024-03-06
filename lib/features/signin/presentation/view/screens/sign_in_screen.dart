@@ -134,7 +134,7 @@ class SignInScreen extends StatelessWidget {
                       child: const SizedBox(),
                     ),
                     const SizedBox(height: 20),
-                    const SignInOptions(currentPage: "SignUp")
+                    const SignInOptions()
                   ]),
             ),
           ),

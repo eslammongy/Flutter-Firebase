@@ -3,16 +3,12 @@ import 'package:go_router/go_router.dart';
 import '../../view_model/signin_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
-import 'package:flutter_firebase/core/constants/app_assets.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/build_login_option_btn.dart';
 
 class SignInOptions extends StatelessWidget {
   const SignInOptions({
     Key? key,
-    required this.currentPage,
   }) : super(key: key);
-
-  final String currentPage;
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +60,20 @@ class SignInOptions extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                buildLoginOptionBtn(context, onPressed: () async {
-                  GoRouter.of(context).push(AppRouter.phoneAuthScreen);
-                }, btnText: "Phone"),
-                buildLoginOptionBtn(context,
-                    iconPath: AppAssetsManager.googleLogo, onPressed: () async {
-                  await SignInCubit.get(context).signInWithGoogleAccount();
-                }, btnText: "Google")
+                SignInOptionBtn(
+                  btnIconPath: "",
+                  btnText: "SignIn With Phone",
+                  onPressed: () async {
+                    GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+                  },
+                ),
+                SignInOptionBtn(
+                  btnIconPath: "",
+                  btnText: "SignIn With Google",
+                  onPressed: () async {
+                    GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+                  },
+                ),
               ],
             ),
             const SizedBox(
@@ -93,7 +96,7 @@ class SignInOptions extends StatelessWidget {
                       GoRouter.of(context).push(AppRouter.signUpScreen);
                     },
                     child: Text(
-                      currentPage,
+                      "Sign up",
                       style: theme.textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.w700,
                           color: theme.colorScheme.secondary),
