@@ -14,18 +14,17 @@ import 'package:flutter_firebase/features/signin/presentation/view/widgets/custo
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/login_screen_intro_section.dart';
 
 class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
-  final userNameTextEditor = TextEditingController();
-  final passwordTextEditor = TextEditingController();
-  final emailTextEditor = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userNameTextEditor = TextEditingController();
+    final passwordTextEditor = TextEditingController();
+    final emailTextEditor = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     final theme = Theme.of(context);
 
     return Scaffold(
-     
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -82,17 +81,22 @@ class SignUpScreen extends StatelessWidget {
             SizedBox(
               height: 5.h,
             ),
-            CustomLoginBtn(
+            CustomTextButton(
               backgroundColor: theme.colorScheme.primary,
               text: "Sign up",
               onPressed: () async {
-                await userSignUp(context);
+                await userSignUp(
+                  context,
+                  userNameTextEditor,
+                  passwordTextEditor,
+                  emailTextEditor,
+                );
               },
             ),
             SizedBox(
               height: 3.h,
             ),
-            BlocListener<SignInCubit, SignInState>(
+            BlocListener<SignInCubit, SignInStates>(
               listenWhen: (previous, current) {
                 return previous != current;
               },
@@ -100,14 +104,14 @@ class SignUpScreen extends StatelessWidget {
                 if (state is SignInLoadingState) {
                   showLoadingDialog(context);
                 }
-                if (state is SignUpUserSuccessState) {
+                if (state is SignUpSuccessState) {
                   await UserInfoCubit.get(context)
                       .createNewUser(user: state.userModel)
                       .then((value) async {
                     await _saveUserInfoLocally(context, user: state.userModel);
                   });
                 }
-                if (state is SignInFailureState) {
+                if (state is SignInGenericFailureState) {
                   Future(() {
                     GoRouter.of(context).pop();
                     displaySnackBar(context, state.errorMsg);
@@ -147,17 +151,20 @@ class SignUpScreen extends StatelessWidget {
 
   Future<void> userSignUp(
     BuildContext context,
+    TextEditingController userNTextController,
+    TextEditingController passwordTextController,
+    TextEditingController emailTextController,
   ) async {
-    if (emailTextEditor.text.isEmpty ||
-        passwordTextEditor.text.isEmpty ||
-        userNameTextEditor.text.isEmpty) {
+    if (emailTextController.text.isEmpty ||
+        passwordTextController.text.isEmpty ||
+        userNTextController.text.isEmpty) {
       displaySnackBar(context, "please make sure you entered all info!");
     }
 
-    await SignInCubit.get(context).userRegisterWithEmailPassword(
-        name: userNameTextEditor.text,
-        email: emailTextEditor.text,
-        password: passwordTextEditor.text);
+    await SignInCubit.get(context).signUpWithEmailPassword(
+        name: userNTextController.text,
+        email: emailTextController.text,
+        password: passwordTextController.text);
   }
 
   Future<void> _saveUserInfoLocally(BuildContext context,

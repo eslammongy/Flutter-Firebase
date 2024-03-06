@@ -7,8 +7,8 @@ import 'package:flutter_firebase/core/utils/helper.dart';
 import 'package:flutter_firebase/core/utils/user_pref.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_firebase/core/constants/app_assets.dart';
+import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
-import 'package:flutter_firebase/features/signin/presentation/view_model/phone_auth_cubit.dart';
 
 class VerificationOtpScreen extends StatelessWidget {
   final String verifyId;
@@ -42,7 +42,7 @@ class VerificationOtpScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        PhoneAuthCubit.get(context).verificationId = verifyId;
+        SignInCubit.get(context).verificationId = verifyId;
 
         final PinTheme defaultPinTheme = PinTheme(
           width: 56,
@@ -67,14 +67,12 @@ class VerificationOtpScreen extends StatelessWidget {
                   Text(
                     "Verification",
                     textAlign: TextAlign.center,
-                    style:
-                        theme.textTheme.displaySmall,
+                    style: theme.textTheme.displaySmall,
                   ),
                   Text(
                     "Code",
                     textAlign: TextAlign.center,
-                    style:
-                          theme.textTheme.displaySmall,
+                    style: theme.textTheme.displaySmall,
                   ),
                   SizedBox(
                       width: 90.w,
@@ -100,12 +98,8 @@ class VerificationOtpScreen extends StatelessWidget {
                           hapticFeedbackType: HapticFeedbackType.lightImpact,
                           onCompleted: (code) {
                             showLoadingDialog(context);
-                            PhoneAuthCubit.get(context)
-                                .submitOtbCode(code)
-                                .then((value) {
-                              UserInfoCubit.get(context).userModel =
-                                  PhoneAuthCubit.get(context).userModel;
-                            });
+                            SignInCubit.get(context)
+                                .signInWithPhoneNumber(code);
                           },
                           cursor: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -139,19 +133,19 @@ class VerificationOtpScreen extends StatelessWidget {
                             border: Border.all(color: theme.colorScheme.error),
                           ),
                         ),
-                        BlocListener<PhoneAuthCubit, PhoneAuthState>(
+                        BlocListener<SignInCubit, SignInStates>(
                           listenWhen: (previous, current) {
                             return previous != current;
                           },
                           listener: (context, state) async {
-                            if (state is PhoneOtpCodeVerified) {
+                            if (state is PhoneOtpCodeVerifiedState) {
                               await UserInfoCubit.get(context)
                                   .createNewUser(user: state.userModel);
                             }
-                            if (state is PhoneAuthErrorOccurred) {
+                            if (state is SignInGenericFailureState) {
                               Future(() {
                                 GoRouter.of(context).pop();
-                                displaySnackBar(context, state.message);
+                                displaySnackBar(context, state.errorMsg);
                               });
                             }
                           },

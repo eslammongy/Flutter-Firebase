@@ -9,11 +9,11 @@ import 'package:flutter_firebase/features/signin/presentation/view/widgets/custo
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_input_filed.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
-  ForgetPasswordScreen({super.key});
-  final eTextEmailController = TextEditingController();
+  const ForgetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final eTextEmailController = TextEditingController();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -57,29 +57,30 @@ class ForgetPasswordScreen extends StatelessWidget {
               ),
               SizedBox(
                 width: 120,
-                child: CustomLoginBtn(
+                child: CustomTextButton(
                   backgroundColor: theme.colorScheme.primary,
                   text: "Send Email",
                   onPressed: () async {
                     await SignInCubit.get(context)
-                        .userResetPassword(eTextEmailController.text);
+                        .resetUserPassword(eTextEmailController.text);
                   },
                 ),
               ),
-              BlocListener<SignInCubit, SignInState>(
+              BlocListener<SignInCubit, SignInStates>(
                 listenWhen: (previous, current) {
                   return previous != current;
                 },
                 listener: (context, state) {
-                  if (state is UserResetPasswordLoading) {
+                  if (state is SignInLoadingState) {
                     showLoadingDialog(context);
                   }
-                  if (state is UserResetPasswordSuccess) {
+                  if (state is ResetPasswordSuccessState) {
                     GoRouter.of(context).pushReplacement(AppRouter.loginScreen);
                   }
-                  if (state is UserResetPasswordError) {
-                    displaySnackBar(context, state.errorMsg);
+                  if (state is SignInGenericFailureState) {
+                    // pop the loading dialog
                     GoRouter.of(context).pop();
+                    displaySnackBar(context, state.errorMsg);
                   }
                 },
                 child: const SizedBox(),

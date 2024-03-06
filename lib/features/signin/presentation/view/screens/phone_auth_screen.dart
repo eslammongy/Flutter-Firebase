@@ -1,63 +1,59 @@
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../widgets/custom_text_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/custom_text_input_filed.dart';
 import 'package:flutter_firebase/core/utils/helper.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter_firebase/core/constants/app_assets.dart';
-import 'package:flutter_firebase/core/utils/services_locator.dart' as injectable;
-import 'package:flutter_firebase/features/signin/presentation/view_model/phone_auth_cubit.dart';
-
+import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
+import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_button.dart';
 
 class PhoneAuthScreen extends StatelessWidget {
-  PhoneAuthScreen({super.key});
-  final phoneNumberController = TextEditingController();
+  const PhoneAuthScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final phoneNumController = TextEditingController();
     final theme = Theme.of(context);
 
     String countryCode = '+20';
-    return BlocConsumer<PhoneAuthCubit, PhoneAuthState>(
+    return BlocConsumer<SignInCubit, SignInStates>(
       listener: (context, state) {
-        if (state is PhoneAuthLoading) {
+        if (state is SignInLoadingState) {
           showLoadingDialog(context);
         }
-        if (state is PhoneNumberSubmitted) {
+        if (state is PhoneNumberSubmittedState) {
+          // pop the loading dialog
           GoRouter.of(context).pop();
-
-          GoRouter.of(context).pushReplacement(AppRouter.verifyingPhoneScreen,
-              extra: injectable.getIt<PhoneAuthCubit>().verificationId);
+          GoRouter.of(context).pushReplacement(AppRouter.verifyingPhoneScreen);
         }
-        if (state is PhoneAuthErrorOccurred) {
+        if (state is SignInGenericFailureState) {
+          // pop the loading dialog
           GoRouter.of(context).pop();
-          String errorMeg = state.message;
-
-          displaySnackBar(context, errorMeg);
+          displaySnackBar(context, state.errorMsg);
         }
       },
       builder: (context, state) {
         return Scaffold(
             body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
-                  width:120,
+                  width: 120,
                   child: Padding(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: Image.asset(AppAssetsManager.phoneAuthImages),
                   ),
                 ),
-                SizedBox(
-                  height:20,
+                const SizedBox(
+                  height: 20,
                 ),
                 DecoratedBox(
                   decoration: BoxDecoration(
@@ -86,7 +82,7 @@ class PhoneAuthScreen extends StatelessWidget {
                       SizedBox(
                         width: 120,
                         child: CustomTextInputField(
-                          textEditingController: phoneNumberController,
+                          textEditingController: phoneNumController,
                           hint: "enter your phone",
                           textInputType: TextInputType.phone,
                           isTextPassword: false,
@@ -101,24 +97,21 @@ class PhoneAuthScreen extends StatelessWidget {
                 SizedBox(
                   height: 5.h,
                 ),
-                CustomLoginBtn(
+                CustomTextButton(
                   backgroundColor: theme.colorScheme.primary,
                   text: "Send Code",
                   onPressed: () async {
-                    if (phoneNumberController.value.text.isEmpty ||
-                        phoneNumberController.value.text.length < 10) {
+                    if (phoneNumController.text.isEmpty ||
+                        phoneNumController.text.length < 10) {
                       displaySnackBar(
                           context, "please enter the correct phone number..");
                     } else {
-                      await injectable
-                          .getIt<PhoneAuthCubit>()
-                          .submitUserPhoneNumber(
-                              "$countryCode${phoneNumberController.value.text}");
+                      final String phoneWithCountryCode =
+                          "$countryCode${phoneNumController.value.text}";
+                      await SignInCubit.get(context)
+                          .submitUserPhoneNumber(phoneWithCountryCode);
                     }
                   },
-                ),
-                SizedBox(
-                  height: 3.h,
                 ),
               ],
             ),

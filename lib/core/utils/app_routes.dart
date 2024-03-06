@@ -33,7 +33,7 @@ abstract class AppRouter {
         path: '/',
         builder: (context, state) {
           if (isUserLogin) {
-            return LoginScreen();
+            return const SignInScreen();
           } else {
             return const ProfileScreen();
           }
@@ -41,14 +41,14 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: loginScreen,
-        builder: (context, state) => LoginScreen(),
+        builder: (context, state) => const SignInScreen(),
       ),
       GoRoute(
           path: forgetPasswordScreen,
-          builder: (context, state) => ForgetPasswordScreen()),
+          builder: (context, state) => const ForgetPasswordScreen()),
       GoRoute(
           path: phoneAuthScreen,
-          builder: (context, state) => PhoneAuthScreen()),
+          builder: (context, state) => const PhoneAuthScreen()),
       GoRoute(
         path: verifyingPhoneScreen,
         builder: (context, state) => VerificationOtpScreen(
@@ -57,7 +57,7 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: signUpScreen,
-        builder: (context, state) => SignUpScreen(),
+        builder: (context, state) => const SignUpScreen(),
       ),
       GoRoute(
         path: profileScreen,
