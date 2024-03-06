@@ -6,8 +6,8 @@ import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_firebase/core/constants/app_assets.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/build_login_option_btn.dart';
 
-class UserLoginOptions extends StatelessWidget {
-  const UserLoginOptions({
+class SignInOptions extends StatelessWidget {
+  const SignInOptions({
     Key? key,
     required this.currentPage,
   }) : super(key: key);
@@ -17,7 +17,7 @@ class UserLoginOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocBuilder<SignInCubit, SignInState>(
+    return BlocBuilder<SignInCubit, SignInStates>(
       builder: (context, state) {
         return Column(
           children: [

@@ -20,12 +20,12 @@ class LoginScreenIntroSection extends StatelessWidget {
           ),
         ),
         Text(
-          "Fox Tracker",
+          "Welcome Back!",
           style: theme.textTheme.headlineMedium!
               .copyWith(fontWeight: FontWeight.w600),
         ),
         Text(
-          "manage your live smartly..",
+          "sing in to continue",
           style: theme.textTheme.bodyMedium!
               .copyWith(color: theme.colorScheme.surfaceTint),
         ),

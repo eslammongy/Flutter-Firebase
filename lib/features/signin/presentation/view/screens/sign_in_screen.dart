@@ -7,19 +7,19 @@ import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
-import 'package:flutter_firebase/features/signin/presentation/view/widgets/user_login_options.dart';
+import 'package:flutter_firebase/features/signin/presentation/view/widgets/sign_in_options.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_button.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_input_filed.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/login_screen_intro_section.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
-  final etPasswordController = TextEditingController();
-  final etEmailController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final passwordTxtController = TextEditingController();
+    final emailTxtController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     final userInfoCubit = UserInfoCubit.get(context);
     final theme = Theme.of(context);
     return BlocConsumer<UserInfoCubit, UserInfoState>(
@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             CustomTextInputField(
-                              textEditingController: etEmailController,
+                              textEditingController: emailTxtController,
                               hint: "enter your email",
                               maxLines: 1,
                               prefix: const Icon(
@@ -67,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                               height: 10,
                             ),
                             CustomTextInputField(
-                              textEditingController: etPasswordController,
+                              textEditingController: passwordTxtController,
                               hint: "enter your password",
                               maxLines: 1,
                               prefix: const Icon(
@@ -80,15 +80,16 @@ class LoginScreen extends StatelessWidget {
                           ],
                         )),
                     const SizedBox(height: 20),
-                    CustomLoginBtn(
+                    CustomTextButton(
                         backgroundColor: theme.colorScheme.primary,
                         text: "Sign In",
                         textColor: theme.colorScheme.background,
                         onPressed: () async {
                           await userSignInWithEmail(
-                              context,
-                              etEmailController.text,
-                              etPasswordController.text);
+                            context,
+                            emailTxtController,
+                            passwordTxtController,
+                          );
                         }),
                     const SizedBox(height: 15),
                     InkWell(
@@ -102,37 +103,29 @@ class LoginScreen extends StatelessWidget {
                         style: theme.textTheme.titleMedium,
                       ),
                     ),
-                    BlocListener<SignInCubit, SignInState>(
-                      listenWhen: (previous, current) {
-                        return previous != current;
-                      },
+                    BlocListener<SignInCubit, SignInStates>(
                       listener: (context, state) async {
                         if (state is SignInLoadingState) {
                           showLoadingDialog(context);
                         }
                         if (state is SignInWithGoogleSuccessState) {
                           if (userInfoCubit.userModel == null) {
-                            Future(() async {
-                              await userInfoCubit
-                                  .createNewUser(user: state.userModel)
-                                  .then((value) async {
-                                await _saveUserInfoLocally(
-                                    context, state.userModel);
-                              });
+                            await userInfoCubit
+                                .createNewUser(user: state.userModel)
+                                .then((value) async {
+                              await _saveUserInfoLocally(
+                                  context, state.userModel);
                             });
                           }
                         }
                         if (state is SignInSuccessState) {
-                          final userInfoCubit = UserInfoCubit.get(context);
-                          if (userInfoCubit.userModel == null) {
-                            await _fetchUserInfo(context);
-                          } else {
-                            await _saveUserInfoLocally(
-                                context, state.userModel);
-                          }
+                          Future(() async {
+                            await _getUserInfo(context);
+                          });
                         }
-                        if (state is SignInFailureState) {
+                        if (state is SignInGenericFailureState) {
                           Future(() {
+                            //pop the loading dialog
                             GoRouter.of(context).pop();
                             displaySnackBar(context, state.errorMsg);
                           });
@@ -141,7 +134,7 @@ class LoginScreen extends StatelessWidget {
                       child: const SizedBox(),
                     ),
                     const SizedBox(height: 20),
-                    const UserLoginOptions(currentPage: "Sign Up")
+                    const SignInOptions(currentPage: "SignUp")
                   ]),
             ),
           ),
@@ -150,7 +143,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _fetchUserInfo(BuildContext context) async {
+  Future<void> _getUserInfo(BuildContext context) async {
     await UserInfoCubit.get(context).getUserInfo().then((value) async {
       await _saveUserInfoLocally(
           context, UserInfoCubit.get(context).userModel ?? UserModel());
@@ -166,21 +159,19 @@ class LoginScreen extends StatelessWidget {
 
   userSignInWithEmail(
     BuildContext context,
-    String email,
-    String password,
+    TextEditingController emailController,
+    TextEditingController passwordController,
   ) async {
     final signInCubit = SignInCubit.get(context);
-
-    if (email.isEmpty || password.isEmpty) {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       displaySnackBar(context, "please make sure you entered all info!");
       return;
     }
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(emailController.text)) {
       displaySnackBar(context, "please make sure you entered a valid email!");
       return;
     }
-
-    await signInCubit.userSignINWithEmailPassword(
-        email: etEmailController.text, password: etPasswordController.text);
+    await signInCubit.signInWithEmailPassword(
+        email: emailController.text, password: passwordController.text);
   }
 }

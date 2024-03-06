@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/core/utils/helper.dart';
 
-class CustomLoginBtn extends StatelessWidget {
-  const CustomLoginBtn(
+class CustomTextButton extends StatelessWidget {
+  const CustomTextButton(
       {super.key,
       required this.backgroundColor,
       this.textColor,
@@ -18,7 +18,7 @@ class CustomLoginBtn extends StatelessWidget {
     final theme = Theme.of(context);
     return SizedBox(
       height: 60,
-      width: double.maxFinite,
+      width: double.infinity,
       child: DecoratedBox(
         decoration: BoxDecoration(
             boxShadow: defBoxShadows, borderRadius: publicRoundedRadius),

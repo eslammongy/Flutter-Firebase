@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_firebase/core/utils/user_pref.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
-import 'package:flutter_firebase/features/signin/presentation/view/screens/login_screen.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/screens/signup_screen.dart';
+import 'package:flutter_firebase/features/signin/presentation/view/screens/sign_in_screen.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/forget_password.dart';
 import 'package:flutter_firebase/features/profile/presentation/view/screens/profile_screen.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/screens/phone_auth_screen.dart';

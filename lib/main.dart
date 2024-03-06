@@ -35,7 +35,7 @@ class FlutterFirebase extends StatelessWidget {
         providers: [
           BlocProvider(
                 create: (context) => SignInCubit(
-                  userSignInRepo: injectable.getIt<UserSignInRepo>(),
+                  signInRepo: injectable.getIt<SignInRepo>(),
                 ),)
         ],
         child: MaterialApp.router(
