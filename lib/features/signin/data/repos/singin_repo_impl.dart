@@ -14,7 +14,7 @@ class SignInRepoImplementation implements SignInRepo {
   });
 
   @override
-  Future<Either<AuthExceptionsTypes, UserModel?>> signInWithGoogle() async {
+  Future<Either<AuthExceptionsTypes, UserModel>> signInWithGoogle() async {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn();
       GoogleSignInAccount? googleAccount = await googleSignIn.signIn();
@@ -70,7 +70,7 @@ class SignInRepoImplementation implements SignInRepo {
   }
 
   @override
-  Future<Either<AuthExceptionsTypes, UserModel?>> signInWithEmailPass(
+  Future<Either<AuthExceptionsTypes, UserModel>> signInWithEmailPass(
       {required String email, required String password}) async {
     try {
       await firebaseAuth
@@ -134,7 +134,7 @@ class SignInRepoImplementation implements SignInRepo {
   }
 
   @override
-  Future<Either<AuthExceptionsTypes, UserModel?>> signInWithPhoneNumber({
+  Future<Either<AuthExceptionsTypes, UserModel>> signInWithPhoneNumber({
     required String otpCode,
     required String verificationId,
   }) async {

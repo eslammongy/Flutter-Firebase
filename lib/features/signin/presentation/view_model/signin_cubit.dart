@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_firebase/core/utils/validation_input.dart';
+import 'package:flutter_firebase/core/errors/exp_enum.dart';
 import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/signin/data/repos/signin_repo.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
@@ -11,71 +10,60 @@ class SignInCubit extends Cubit<SignInStates> {
 
   static SignInCubit get(context) => BlocProvider.of(context);
   final SignInRepo signInRepo;
-  UserModel userModel = UserModel();
-  String verificationId = '';
+  String? verificationId;
 
   Future<void> signInWithGoogleAccount() async {
     emit(SignInLoadingState());
     try {
-      var result = await signInRepo.signInWithGoogle(userModel: userModel);
-      result.fold((errorStatus) {
-        var errorMsg =
-            AuthExceptionHandler.generateExceptionMessage(errorStatus);
+      var result = await signInRepo.signInWithGoogle();
+      result.fold((errorCode) {
+        var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorCode);
         emit(SignInGenericFailureState(errorMsg));
       }, (user) async {
-        userModel = user!;
-        emit(SignInWithGoogleSuccessState(userModel: userModel));
+        emit(SignInWithGoogleSuccessState(userModel: user));
       });
-    } catch (e) {
-      var errorMsg = AuthExceptionHandler.generateExceptionMessage(e);
+    } catch (exp) {
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(exp);
       emit(SignInGenericFailureState(errorMsg));
     }
   }
 
-  Future<void> signUpWithEmailPassword(
-      {required String name,
-      required String email,
-      required String password}) async {
-    final errorText = isValidUserInput(email: email, password: password);
-    if (errorText != null) {
-      emit(SignInGenericFailureState(
-          "please make sure you write valid email and valid password."));
-      return;
-    }
+  Future<void> signUpWithEmailPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     emit(SignInLoadingState());
     var result =
         await signInRepo.signUpWithEmail(email: email, password: password);
-
-    result.fold((errorStatus) {
-      var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorStatus);
+    result.fold((errorCode) {
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(errorCode);
       emit(SignInGenericFailureState(errorMsg));
     }, (userModel) async {
-      userModel.name = name;
-      this.userModel = userModel;
       emit(SignUpSuccessState(userModel: userModel));
     });
   }
 
-  Future<void> signInWithEmailPassword(
-      {required String email, required String password}) async {
+  Future<void> signInWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
     emit(SignInLoadingState());
     var result =
         await signInRepo.signInWithEmailPass(email: email, password: password);
-
-    result.fold((errorStatus) {
-      var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorStatus);
+    result.fold((errorCode) {
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(errorCode);
       emit(SignInGenericFailureState(errorMsg));
     }, (userModel) async {
-      this.userModel = userModel!;
-      emit(SignInSuccessState(userModel: this.userModel));
+      emit(SignInSuccessState(userModel: userModel));
     });
   }
 
   Future resetUserPassword(String email) async {
     emit(SignInLoadingState());
     var result = await signInRepo.resetUserPassword(email: email);
-    result.fold((errorStatus) {
-      var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorStatus);
+    result.fold((errorCode) {
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(errorCode);
       emit(SignInGenericFailureState(errorMsg));
     }, (right) {
       emit(ResetPasswordSuccessState());
@@ -84,40 +72,33 @@ class SignInCubit extends Cubit<SignInStates> {
 
   Future<void> submitUserPhoneNumber(String phoneNumber) async {
     emit(SignInLoadingState());
-    await firebaseAuth.verifyPhoneNumber(
+    await signInRepo.submitUserPhoneNumber(
       phoneNumber: phoneNumber,
-      verificationCompleted: (credential) async {},
-      timeout: const Duration(seconds: 60),
-      codeSent: (verificationId, reSendCode) {
-        this.verificationId = verificationId;
+      setVerificationCode: (verifyCode) {
+        verificationId = verifyCode;
         emit(PhoneNumberSubmittedState());
       },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        this.verificationId = verificationId;
-        //  emit(PhoneNumberSubmitted());
+      verificationFailed: () {
+        final errorMsg = AuthExceptionHandler.generateExceptionMessage(
+            AuthExceptionsTypes.authInvalidContinueUri);
+        emit(SignInGenericFailureState(errorMsg));
       },
-      verificationFailed: verificationFailed,
     );
-  }
-
-  void verificationFailed(FirebaseAuthException exception) {
-    var authErrorStatus = AuthExceptionHandler.handleException(exception);
-    var errorMsg =
-        AuthExceptionHandler.generateExceptionMessage(authErrorStatus);
-
-    emit(SignInGenericFailureState(errorMsg));
   }
 
   Future<void> signInWithPhoneNumber(String otpCode) async {
     emit(SignInLoadingState());
-
+    if (verificationId == null) {
+      return;
+    }
     var result = await signInRepo.signInWithPhoneNumber(
-        otpCode: otpCode, userModel: userModel, verificationId: verificationId);
-    result.fold((errorStatus) {
-      var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorStatus);
+      otpCode: otpCode,
+      verificationId: verificationId!,
+    );
+    result.fold((errorCode) {
+      var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorCode);
       emit(SignInGenericFailureState(errorMsg));
-    }, (user) async {
-      userModel = user!;
+    }, (userModel) async {
       emit(PhoneOtpCodeVerifiedState(userModel: userModel));
     });
   }
