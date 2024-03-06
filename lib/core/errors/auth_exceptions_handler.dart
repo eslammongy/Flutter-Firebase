@@ -1,51 +1,51 @@
-import 'errors_enum.dart';
+import 'exp_enum.dart';
 
-class AuthExceptionHandler {
+abstract class AuthExceptionHandler {
   static handleException(error) {
-    AuthResultStatus status;
+    AuthExceptionsTypes status;
     switch (error) {
       case "invalid-email":
-        status = AuthResultStatus.invalidEmail;
+        status = AuthExceptionsTypes.invalidEmail;
         break;
       case "weak-password":
-        status = AuthResultStatus.weekPassword;
+        status = AuthExceptionsTypes.weekPassword;
         break;
       case "wrong-password":
-        status = AuthResultStatus.wrongPassword;
+        status = AuthExceptionsTypes.wrongPassword;
         break;
       case "user-not-found":
-        status = AuthResultStatus.userNotFound;
+        status = AuthExceptionsTypes.userNotFound;
         break;
       case "user-disabled":
-        status = AuthResultStatus.userDisabled;
+        status = AuthExceptionsTypes.userDisabled;
         break;
       case "invalid-verification-code":
-        status = AuthResultStatus.tooManyRequests;
+        status = AuthExceptionsTypes.tooManyRequests;
         break;
       case "operation-not-allowed":
-        status = AuthResultStatus.operationNotAllowed;
+        status = AuthExceptionsTypes.operationNotAllowed;
         break;
       case "email-already-in-use":
-        status = AuthResultStatus.emailAlreadyExists;
+        status = AuthExceptionsTypes.emailAlreadyExists;
         break;
       case "notValidUserInput":
-        status = AuthResultStatus.notValidUserInput;
+        status = AuthExceptionsTypes.notValidUserInput;
         break;
       case "auth/invalid-continue-uri":
-        status = AuthResultStatus.authInvalidContinueUri;
+        status = AuthExceptionsTypes.authInvalidContinueUri;
         break;
       case "auth/unauthorized-continue-uri":
-        status = AuthResultStatus.authUnauthorizedContinueUri;
+        status = AuthExceptionsTypes.authUnauthorizedContinueUri;
         break;
       case "auth/missing-ios-bundle-id":
-        status = AuthResultStatus.authMissingIosBundleId;
+        status = AuthExceptionsTypes.authMissingIosBundleId;
         break;
       case " auth/invalid-email":
-        status = AuthResultStatus.authInvalidEmail;
+        status = AuthExceptionsTypes.authInvalidEmail;
         break;
 
       default:
-        status = AuthResultStatus.undefined;
+        status = AuthExceptionsTypes.undefined;
     }
     return status;
   }
@@ -53,49 +53,49 @@ class AuthExceptionHandler {
   static String generateExceptionMessage(exceptionCode) {
     String errorMessage;
     switch (exceptionCode) {
-      case AuthResultStatus.invalidEmail:
+      case AuthExceptionsTypes.invalidEmail:
         errorMessage = "Your email address appears to be malformed.";
         break;
-      case AuthResultStatus.wrongPassword:
+      case AuthExceptionsTypes.wrongPassword:
         errorMessage =
             "The password is invalid or the user does not have a password.";
         break;
-      case AuthResultStatus.weekPassword:
+      case AuthExceptionsTypes.weekPassword:
         errorMessage =
             "The password is invalid or the user does not have a password.";
         break;
-      case AuthResultStatus.userNotFound:
+      case AuthExceptionsTypes.userNotFound:
         errorMessage = "User with this email doesn't exist.";
         break;
-      case AuthResultStatus.userDisabled:
+      case AuthExceptionsTypes.userDisabled:
         errorMessage = "User with this email has been disabled.";
         break;
-      case AuthResultStatus.tooManyRequests:
+      case AuthExceptionsTypes.tooManyRequests:
         errorMessage = "Too many requests. Try again later.";
         break;
-      case AuthResultStatus.operationNotAllowed:
+      case AuthExceptionsTypes.operationNotAllowed:
         errorMessage = "Signing in with Email and Password is not enabled.";
         break;
-      case AuthResultStatus.emailAlreadyExists:
+      case AuthExceptionsTypes.emailAlreadyExists:
         errorMessage =
             "The email has already been registered. Please login or reset your password.";
         break;
-      case AuthResultStatus.notValidUserInput:
+      case AuthExceptionsTypes.notValidUserInput:
         errorMessage =
             "please make sure you entered all info or correct wrong info...";
         break;
-      case AuthResultStatus.authInvalidContinueUri:
+      case AuthExceptionsTypes.authInvalidContinueUri:
         errorMessage = "The continue URL provided in the request is invalid.";
         break;
-      case AuthResultStatus.authUnauthorizedContinueUri:
+      case AuthExceptionsTypes.authUnauthorizedContinueUri:
         errorMessage =
             "The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase console.";
         break;
-      case AuthResultStatus.authMissingIosBundleId:
+      case AuthExceptionsTypes.authMissingIosBundleId:
         errorMessage =
             "An iOS Bundle ID must be provided if an App Store ID is provided.";
         break;
-      case AuthResultStatus.authInvalidEmail:
+      case AuthExceptionsTypes.authInvalidEmail:
         errorMessage = "Thrown if the email address is not valid.";
         break;
       default:

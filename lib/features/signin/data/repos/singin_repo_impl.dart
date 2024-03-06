@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_firebase/core/errors/errors_enum.dart';
+import 'package:flutter_firebase/core/errors/exp_enum.dart';
 import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/signin/data/repos/signin_repo.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
@@ -16,7 +16,7 @@ class SignInRepoImplementation implements SignInRepo {
   });
 
   @override
-  Future<Either<AuthResultStatus, UserModel?>> signInWithGoogle(
+  Future<Either<AuthExceptionsTypes, UserModel?>> signInWithGoogle(
       {required UserModel userModel}) async {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn();
@@ -43,7 +43,7 @@ class SignInRepoImplementation implements SignInRepo {
 
         return right(userModel);
       } else {
-        return left(AuthResultStatus.undefined);
+        return left(AuthExceptionsTypes.undefined);
       }
     } on PlatformException catch (ex) {
       return left(AuthExceptionHandler.handleException(ex.message));
@@ -53,7 +53,7 @@ class SignInRepoImplementation implements SignInRepo {
   }
 
   @override
-  Future<Either<AuthResultStatus, UserModel>> signUpWithEmail(
+  Future<Either<AuthExceptionsTypes, UserModel>> signUpWithEmail(
       {required String email, required String password}) async {
     try {
       var userModel = UserModel();
@@ -74,12 +74,12 @@ class SignInRepoImplementation implements SignInRepo {
       return left(AuthExceptionHandler.handleException(error.code));
     } catch (error) {
       return left(
-          AuthExceptionHandler.handleException(AuthResultStatus.undefined));
+          AuthExceptionHandler.handleException(AuthExceptionsTypes.undefined));
     }
   }
 
   @override
-  Future<Either<AuthResultStatus, UserModel?>> signInWithEmailPass(
+  Future<Either<AuthExceptionsTypes, UserModel?>> signInWithEmailPass(
       {required String email, required String password}) async {
     try {
       var user = (await firebaseAuth.signInWithEmailAndPassword(
@@ -95,19 +95,19 @@ class SignInRepoImplementation implements SignInRepo {
 
         return right(userModel);
       } else {
-        return left(AuthResultStatus.undefined);
+        return left(AuthExceptionsTypes.undefined);
       }
     } on FirebaseAuthException catch (error) {
       return left(AuthExceptionHandler.handleException(error.code));
     } catch (error) {
       debugPrint("when user sign in => ${error.toString()}");
       return left(
-          AuthExceptionHandler.handleException(AuthResultStatus.undefined));
+          AuthExceptionHandler.handleException(AuthExceptionsTypes.undefined));
     }
   }
 
   @override
-  Future<Either<AuthResultStatus, bool>> resetUserPassword(
+  Future<Either<AuthExceptionsTypes, bool>> resetUserPassword(
       {required String email}) async {
     try {
       await firebaseAuth.sendPasswordResetEmail(email: email).then((value) {
@@ -118,30 +118,39 @@ class SignInRepoImplementation implements SignInRepo {
       return left(AuthExceptionHandler.handleException(error.code));
     } catch (e) {
       return left(
-          AuthExceptionHandler.handleException(AuthResultStatus.undefined));
+          AuthExceptionHandler.handleException(AuthExceptionsTypes.undefined));
     }
   }
 
   @override
-  Future<Either<AuthResultStatus, UserModel?>> submitUserPhoneNumber(
-      {required String phoneNumber}) async {
-    await firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (credential) async {},
-      timeout: const Duration(seconds: 30),
-      codeSent: (verificationId, reSendCode) {
-        this.verificationId = verificationId;
-      
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        this.verificationId = verificationId;
-      },
-      verificationFailed: verificationFailed,
-    );
+  Future<Either<AuthExceptionsTypes, bool>> submitUserPhoneNumber({
+    required String phoneNumber,
+    required Function(String verifyCode) setVerificationCode,
+    required Function() verificationFailed,
+  }) async {
+    try {
+      await firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (credential) async {},
+        timeout: const Duration(seconds: 30),
+        codeSent: (verificationId, reSendCode) {
+          setVerificationCode(verificationId);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          setVerificationCode(verificationId);
+        },
+        verificationFailed: verificationFailed(),
+      );
+      return right(true);
+    } on FirebaseAuthException catch (error) {
+      return left(AuthExceptionHandler.handleException(error.code));
+    } catch (error) {
+      return left(AuthExceptionsTypes.undefined);
+    }
   }
 
   @override
-  Future<Either<AuthResultStatus, UserModel?>> signInWithPhoneNumber(
+  Future<Either<AuthExceptionsTypes, UserModel?>> signInWithPhoneNumber(
       {required String otpCode,
       required String verificationId,
       required UserModel userModel}) async {
@@ -161,12 +170,12 @@ class SignInRepoImplementation implements SignInRepo {
         debugPrint("User Phone Number ${userModel.phone}");
         return right(userModel);
       } else {
-        return left(AuthResultStatus.undefined);
+        return left(AuthExceptionsTypes.undefined);
       }
     } on FirebaseAuthException catch (error) {
       return left(AuthExceptionHandler.handleException(error.code));
     } catch (error) {
-      return left(AuthResultStatus.undefined);
+      return left(AuthExceptionsTypes.undefined);
     }
   }
 }

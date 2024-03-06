@@ -2,13 +2,9 @@ import 'user_info_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_firebase/core/errors/errors_enum.dart';
+import 'package:flutter_firebase/core/errors/exp_enum.dart';
 import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
-
-
-
-
 
 class UserInfoRepoImpl implements UserInfoRepo {
   final FirebaseAuth firebaseAuth;
@@ -18,7 +14,7 @@ class UserInfoRepoImpl implements UserInfoRepo {
   UserInfoRepoImpl({required this.firebaseAuth});
 
   @override
-  Future<Either<AuthResultStatus, UserModel>> createNewUser(
+  Future<Either<AuthExceptionsTypes, UserModel>> createNewUser(
       {required UserModel userModel}) async {
     try {
       await databaseReference
@@ -31,7 +27,7 @@ class UserInfoRepoImpl implements UserInfoRepo {
   }
 
   @override
-  Future<Either<AuthResultStatus, UserModel>> retrieveUserInfo(
+  Future<Either<AuthExceptionsTypes, UserModel>> retrieveUserInfo(
       {required UserModel userModel}) async {
     try {
       await databaseReference

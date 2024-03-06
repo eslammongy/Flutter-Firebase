@@ -1,4 +1,4 @@
-enum AuthResultStatus {
+enum AuthExceptionsTypes {
   emailAlreadyExists,
   wrongPassword,
   weekPassword,
