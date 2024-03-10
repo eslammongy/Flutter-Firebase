@@ -1,9 +1,8 @@
-part of '../../../../features/profile/presentation/view_model/user_info_cubit.dart';
+part of 'user_info_cubit.dart';
 
-@immutable
 abstract class UserInfoState {}
 
-class UserInfoInitial extends UserInfoState {}
+class UserInfoInitialState extends UserInfoState {}
 
 class UserInfoLoadingState extends UserInfoState {}
 

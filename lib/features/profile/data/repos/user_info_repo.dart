@@ -5,6 +5,5 @@ import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
 abstract class UserInfoRepo {
   Future<Either<AuthExceptionsTypes, UserModel>> createNewUser(
       {required UserModel userModel});
-  Future<Either<AuthExceptionsTypes, UserModel>> retrieveUserInfo(
-      {required UserModel userModel});
+  Future<Either<AuthExceptionsTypes, UserModel>> retrieveUserInfoFromRemote();
 }

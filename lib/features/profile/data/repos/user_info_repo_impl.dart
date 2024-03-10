@@ -27,8 +27,9 @@ class UserInfoRepoImpl implements UserInfoRepo {
   }
 
   @override
-  Future<Either<AuthExceptionsTypes, UserModel>> retrieveUserInfo(
-      {required UserModel userModel}) async {
+  Future<Either<AuthExceptionsTypes, UserModel>>
+      retrieveUserInfoFromRemote() async {
+    UserModel userModel = UserModel();
     try {
       await databaseReference
           .child(firebaseAuth.currentUser!.uid)
