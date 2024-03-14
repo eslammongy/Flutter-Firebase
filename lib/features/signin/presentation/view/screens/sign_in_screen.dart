@@ -1,3 +1,4 @@
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,10 +45,13 @@ class SignInScreen extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: 8.h,
                     ),
                     const LoginScreenIntroSection(),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Form(
                         key: formKey,
                         child: Column(

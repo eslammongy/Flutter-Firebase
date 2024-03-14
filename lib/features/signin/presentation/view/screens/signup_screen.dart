@@ -21,7 +21,6 @@ class SignUpScreen extends StatelessWidget {
     final userNameTextEditor = TextEditingController();
     final passwordTextEditor = TextEditingController();
     final emailTextEditor = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -32,52 +31,49 @@ class SignUpScreen extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             const LoginScreenIntroSection(),
-            Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    CustomTextInputField(
-                        textEditingController: userNameTextEditor,
-                        hint: "enter your nick name",
-                        maxLines: 1,
-                        textInputType: TextInputType.name,
-                        prefix: Icon(
-                          FontAwesomeIcons.userLarge,
-                          size: 5.w,
-                        ),
-                        isTextPassword: false,
-                        autoFocus: false),
-                    SizedBox(
-                      height: 2.h,
+            Column(
+              children: [
+                CustomTextInputField(
+                    textEditingController: userNameTextEditor,
+                    hint: "enter your nick name",
+                    maxLines: 1,
+                    prefix: Icon(
+                      FontAwesomeIcons.userLarge,
+                      size: 5.w,
                     ),
-                    CustomTextInputField(
-                        textEditingController: emailTextEditor,
-                        hint: "enter your email",
-                        maxLines: 1,
-                        textInputType: TextInputType.emailAddress,
-                        prefix: Icon(
-                          Icons.email_rounded,
-                          size: 5.w,
-                        ),
-                        isTextPassword: false,
-                        autoFocus: false),
-                    SizedBox(
-                      height: 2.h,
+                    isTextPassword: false,
+                    autoFocus: false),
+                SizedBox(
+                  height: 2.h,
+                ),
+                CustomTextInputField(
+                    textEditingController: emailTextEditor,
+                    hint: "enter your email",
+                    maxLines: 1,
+                    textInputType: TextInputType.emailAddress,
+                    prefix: Icon(
+                      Icons.email_rounded,
+                      size: 5.w,
                     ),
-                    CustomTextInputField(
-                      textEditingController: passwordTextEditor,
-                      hint: "enter your password",
-                      maxLines: 1,
-                      prefix: Icon(
-                        FontAwesomeIcons.lock,
-                        size: 5.w,
-                      ),
-                      isTextPassword: true,
-                      autoFocus: false,
-                      textInputType: TextInputType.visiblePassword,
-                    )
-                  ],
-                )),
+                    isTextPassword: false,
+                    autoFocus: false),
+                SizedBox(
+                  height: 2.h,
+                ),
+                CustomTextInputField(
+                  textEditingController: passwordTextEditor,
+                  hint: "enter your password",
+                  maxLines: 1,
+                  prefix: Icon(
+                    FontAwesomeIcons.lock,
+                    size: 5.w,
+                  ),
+                  isTextPassword: true,
+                  autoFocus: false,
+                  textInputType: TextInputType.visiblePassword,
+                )
+              ],
+            ),
             SizedBox(
               height: 5.h,
             ),

@@ -18,9 +18,6 @@ class SignInOptions extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             Align(
               alignment: Alignment.center,
               child: Row(
@@ -56,26 +53,37 @@ class SignInOptions extends StatelessWidget {
               ),
             ),
             const SizedBox(
+              height: 20,
+            ),
+            SignInOptionBtn(
+              iconPath: AppAssetsManager.facebookIcon,
+              btnText: "SignIn With Facebook",
+              signInOption: SignInOption.facebook,
+              onPressed: () async {
+                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+              },
+            ),
+            const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SignInOptionBtn(
-                  iconPath: AppAssetsManager.phoneIcon,
-                  btnText: "SignIn With Phone",
-                  onPressed: () async {
-                    GoRouter.of(context).push(AppRouter.phoneAuthScreen);
-                  },
-                ),
-                SignInOptionBtn(
-                  iconPath: AppAssetsManager.googleIcon,
-                  btnText: "SignIn With Google",
-                  onPressed: () async {
-                    GoRouter.of(context).push(AppRouter.phoneAuthScreen);
-                  },
-                ),
-              ],
+            SignInOptionBtn(
+              iconPath: AppAssetsManager.googleIcon,
+              btnText: "SignIn With Google",
+              signInOption: SignInOption.google,
+              onPressed: () async {
+                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SignInOptionBtn(
+              iconPath: AppAssetsManager.phoneIcon,
+              btnText: "SignIn With Phone Number",
+              signInOption: SignInOption.phone,
+              onPressed: () async {
+                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+              },
             ),
             const SizedBox(
               height: 10,

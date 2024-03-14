@@ -15,7 +15,7 @@ class LoginScreenIntroSection extends StatelessWidget {
         Center(
           child: Image.asset(
             AppAssetsManager.firebaseLogo,
-            width: 100,
+            width: 80,
             fit: BoxFit.contain,
           ),
         ),
