@@ -6,7 +6,6 @@ import '../widgets/custom_text_input_filed.dart';
 import 'package:flutter_firebase/core/utils/helper.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter_firebase/core/constants/app_assets.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_button.dart';
 
@@ -45,11 +44,11 @@ class PhoneAuthScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 120,
                   child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Image.asset(AppAssetsManager.phoneAuthImages),
+                    padding: EdgeInsets.all(5),
+                    child: Icon(Icons.phone_android_rounded),
                   ),
                 ),
                 const SizedBox(

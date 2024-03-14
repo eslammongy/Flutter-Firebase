@@ -53,7 +53,7 @@ AlertDialog generateAlertDialog() {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Image.asset(
-            AppAssetsManager.loadingSpinerGif,
+            AppAssetsManager.loading,
             width: 100,
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:sizer/sizer.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/core/utils/helper.dart';
 import 'package:flutter_firebase/core/utils/user_pref.dart';
@@ -77,8 +78,8 @@ class VerificationOtpScreen extends StatelessWidget {
                   SizedBox(
                       width: 90.w,
                       height: 30.h,
-                      child: Image.asset(
-                        AppAssetsManager.otpScreenImage,
+                      child: SvgPicture.asset(
+                        AppAssetsManager.verificationCodeImg,
                         fit: BoxFit.cover,
                       )),
                   SizedBox(height: 8.h),

@@ -1,5 +1,4 @@
 import 'package:sizer/sizer.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/core/utils/helper.dart';
@@ -32,8 +31,8 @@ class ProfileScreen extends StatelessWidget {
                     Border.all(width: 3, color: theme.colorScheme.surfaceTint),
                 boxShadow: defBoxShadows,
               ),
-              child: SvgPicture.asset(
-                AppAssetsManager.takeNotesImg,
+              child: Image.asset(
+                AppAssetsManager.firebaseLogo,
                 width: 30.w,
                 fit: BoxFit.contain,
               ),
@@ -42,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
               height: 1.h,
             ),
             Text(
-              userModel!.name ?? 'Fox Tracker',
+              userModel?.name ?? 'Fox Tracker',
             ),
             SizedBox(
               height: 3.h,

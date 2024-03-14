@@ -32,7 +32,7 @@ abstract class AppRouter {
       GoRoute(
         path: '/',
         builder: (context, state) {
-          if (isUserLogin) {
+          if (!isUserLogin) {
             return const SignInScreen();
           } else {
             return const ProfileScreen();
