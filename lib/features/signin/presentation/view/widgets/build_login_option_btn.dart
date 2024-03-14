@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_firebase/core/utils/helper.dart';
 
 class SignInOptionBtn extends StatelessWidget {
   const SignInOptionBtn({
     super.key,
     required this.onPressed,
-    required this.iconData,
+    required this.iconPath,
     required this.btnText,
   });
   final Function() onPressed;
-  final IconData iconData;
+  final String iconPath;
   final String btnText;
 
   @override
@@ -34,9 +35,10 @@ class SignInOptionBtn extends StatelessWidget {
                 SizedBox(
                     width: 60,
                     height: 60,
-                    child: Icon(
-                      iconData,
-                      size: 20,
+                    child: SvgPicture.asset(
+                      iconPath,
+                      width: 20,
+                      fit: BoxFit.scaleDown,
                     )),
                 Text(
                   btnText,

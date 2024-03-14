@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../view_model/signin_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_firebase/core/constants/app_assets.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/build_login_option_btn.dart';
 
 class SignInOptions extends StatelessWidget {
@@ -62,14 +62,14 @@ class SignInOptions extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SignInOptionBtn(
-                  iconData: FontAwesomeIcons.phone,
+                  iconPath: AppAssetsManager.phoneIcon,
                   btnText: "SignIn With Phone",
                   onPressed: () async {
                     GoRouter.of(context).push(AppRouter.phoneAuthScreen);
                   },
                 ),
                 SignInOptionBtn(
-                  iconData: FontAwesomeIcons.google,
+                  iconPath: AppAssetsManager.googleIcon,
                   btnText: "SignIn With Google",
                   onPressed: () async {
                     GoRouter.of(context).push(AppRouter.phoneAuthScreen);
