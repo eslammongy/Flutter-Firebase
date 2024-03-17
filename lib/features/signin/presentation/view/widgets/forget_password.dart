@@ -1,3 +1,4 @@
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,6 +21,7 @@ class ForgetPasswordScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Forget Password"),
+        backgroundColor: theme.colorScheme.background,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -28,11 +30,12 @@ class ForgetPasswordScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               SvgPicture.asset(
                 AppAssetsManager.forgetPasswordImg,
-                height: 100,
+                width: 65.w,
+                fit: BoxFit.cover,
               ),
               const SizedBox(
                 height: 10,
@@ -41,7 +44,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                   "Enter the email associated with your account and we well send an email with instructions to reset your password.",
                   style: theme.textTheme.bodyLarge),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               CustomTextInputField(
                   textEditingController: eTextEmailController,
@@ -54,10 +57,10 @@ class ForgetPasswordScreen extends StatelessWidget {
                   autoFocus: false,
                   maxLines: 1),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
-              SizedBox(
-                width: 120,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: CustomTextButton(
                   backgroundColor: theme.colorScheme.primary,
                   text: "Send Email",

@@ -48,7 +48,10 @@ class SignInScreen extends StatelessWidget {
                     SizedBox(
                       height: 8.h,
                     ),
-                    const LoginScreenIntroSection(),
+                    const LoginScreenIntroSection(
+                      introText: "Welcome Back",
+                      subIntroText: "Sign in to continue",
+                    ),
                     const SizedBox(
                       height: 20,
                     ),

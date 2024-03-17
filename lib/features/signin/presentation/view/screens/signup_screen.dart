@@ -30,7 +30,13 @@ class SignUpScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 5.w),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            const LoginScreenIntroSection(),
+            SizedBox(
+              height: 10.h,
+            ),
+            const LoginScreenIntroSection(
+              introText: "Welcome",
+              subIntroText: "Sign up to continue",
+            ),
             Column(
               children: [
                 CustomTextInputField(
