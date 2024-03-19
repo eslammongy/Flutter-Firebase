@@ -6,4 +6,5 @@ abstract class AppAssetsManager {
   static const String facebookIcon = "assets/svg/facebook_icon.svg";
   static const String phoneIcon = "assets/svg/phone_icon.svg";
   static const String loading = "assets/images/loading.gif";
+  static const String phoneAuthImg = "assets/images/phone_auth.png";
 }

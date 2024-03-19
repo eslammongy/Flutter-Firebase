@@ -14,6 +14,7 @@ class SignInOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final signInCubit = SignInCubit.get(context);
     return BlocBuilder<SignInCubit, SignInStates>(
       builder: (context, state) {
         return Column(
@@ -60,7 +61,7 @@ class SignInOptions extends StatelessWidget {
               btnText: "SignIn With Facebook",
               signInOption: SignInOption.facebook,
               onPressed: () async {
-                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+                ///TODO: implement facebook login
               },
             ),
             const SizedBox(
@@ -71,7 +72,7 @@ class SignInOptions extends StatelessWidget {
               btnText: "SignIn With Google",
               signInOption: SignInOption.google,
               onPressed: () async {
-                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+                signInCubit.signInWithGoogleAccount();
               },
             ),
             const SizedBox(

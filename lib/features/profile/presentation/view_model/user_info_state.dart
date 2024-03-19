@@ -1,19 +1,25 @@
 part of 'user_info_cubit.dart';
 
-abstract class UserInfoState {}
+abstract class ProfileInfoStates {}
 
-class UserInfoInitialState extends UserInfoState {}
+class ProfileInfoInitialState extends ProfileInfoStates {}
 
-class UserInfoLoadingState extends UserInfoState {}
+class ProfileInfoLoadingState extends ProfileInfoStates {}
 
-class UserInfoSuccessfulState extends UserInfoState {
+class ProfileInfoCreatedState extends ProfileInfoStates {
   final UserModel userModel;
 
-  UserInfoSuccessfulState({required this.userModel});
+  ProfileInfoCreatedState({required this.userModel});
 }
 
-class UserInfoFailureState extends UserInfoState {
+class ProfileInfoFetchedState extends ProfileInfoStates {
+  final UserModel userModel;
+
+  ProfileInfoFetchedState({required this.userModel});
+}
+
+class ProfileInfoFailureState extends ProfileInfoStates {
   final String errorMsg;
 
-  UserInfoFailureState({required this.errorMsg});
+  ProfileInfoFailureState({required this.errorMsg});
 }
