@@ -26,16 +26,14 @@ class VerificationOtpScreen extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final theme = Theme.of(context);
 
-    return BlocConsumer<UserInfoCubit, UserInfoState>(
+    return BlocConsumer<ProfileInfoCubit, ProfileInfoStates>(
       listener: (context, state) async {
-        if (state is UserInfoSuccessfulState) {
-          await UserPref.saveUserInfoLocally(userModel: state.userModel)
-              .then((value) {
-            GoRouter.of(context).pushReplacement(AppRouter.profileScreen,
-                extra: UserInfoCubit.get(context).userModel);
+        if (state is ProfileInfoCreatedState) {
+          await UserPref.keepUserAuthenticated(isLogged: true).then((value) {
+            GoRouter.of(context).pushReplacement(AppRouter.profileScreen);
           });
         }
-        if (state is UserInfoFailureState) {
+        if (state is ProfileInfoFailureState) {
           Future(() {
             GoRouter.of(context).pop();
             displaySnackBar(context, state.errorMsg);
@@ -140,8 +138,8 @@ class VerificationOtpScreen extends StatelessWidget {
                           },
                           listener: (context, state) async {
                             if (state is PhoneOtpCodeVerifiedState) {
-                              await UserInfoCubit.get(context)
-                                  .createNewUser(user: state.userModel);
+                              await ProfileInfoCubit.get(context)
+                                  .createNewUserProfile(user: state.userModel);
                             }
                             if (state is SignInGenericFailureState) {
                               Future(() {

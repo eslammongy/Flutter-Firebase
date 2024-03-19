@@ -7,11 +7,12 @@ import 'package:flutter_firebase/core/theme/theme_data.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_firebase/features/signin/data/repos/signin_repo.dart';
-import 'package:flutter_firebase/core/utils/services_locator.dart'
-    as injectable;
-import 'package:flutter_firebase/features/profile/data/repos/user_info_repo.dart';
+import 'package:flutter_firebase/core/utils/services_locator.dart' as injectable;
+import 'package:flutter_firebase/features/profile/data/repos/profile_info_repo.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
+    
+   
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -41,8 +42,8 @@ class FlutterFirebase extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => UserInfoCubit(
-              userInfoRepo: injectable.getIt<UserInfoRepo>(),
+            create: (context) => ProfileInfoCubit(
+              profileInfoRepo: injectable.getIt<ProfileInfoRepo>(),
             ),
           )
         ],

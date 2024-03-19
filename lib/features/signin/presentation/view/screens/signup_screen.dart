@@ -6,7 +6,6 @@ import 'package:flutter_firebase/core/utils/helper.dart';
 import 'package:flutter_firebase/core/utils/user_pref.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_button.dart';
@@ -111,10 +110,10 @@ class SignUpScreen extends StatelessWidget {
                   showLoadingDialog(context);
                 }
                 if (state is SignUpSuccessState) {
-                  await UserInfoCubit.get(context)
-                      .createNewUser(user: state.userModel)
+                  await ProfileInfoCubit.get(context)
+                      .createNewUserProfile(user: state.userModel)
                       .then((value) async {
-                    await _saveUserInfoLocally(context, user: state.userModel);
+                    await _keepUserLoggedIn(context);
                   });
                 }
                 if (state is SignInGenericFailureState) {
@@ -173,10 +172,9 @@ class SignUpScreen extends StatelessWidget {
         password: passwordTextController.text);
   }
 
-  Future<void> _saveUserInfoLocally(BuildContext context,
-      {required UserModel user}) async {
-    await UserPref.saveUserInfoLocally(userModel: user).whenComplete(() {
-      GoRouter.of(context).pushReplacement(AppRouter.loginScreen);
+  Future<void> _keepUserLoggedIn(BuildContext context) async {
+    await UserPref.keepUserAuthenticated(isLogged: true).then((value) {
+      GoRouter.of(context).pushReplacement(AppRouter.profileScreen);
     });
   }
 }

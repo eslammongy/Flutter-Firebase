@@ -1,41 +1,38 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
-import 'package:flutter_firebase/features/profile/data/repos/user_info_repo.dart';
+import 'package:flutter_firebase/features/profile/data/repos/profile_info_repo.dart';
 
 part 'user_info_state.dart';
 
-class UserInfoCubit extends Cubit<UserInfoState> {
-  UserInfoCubit({required this.userInfoRepo}) : super(UserInfoInitialState());
-  final UserInfoRepo userInfoRepo;
+class ProfileInfoCubit extends Cubit<ProfileInfoStates> {
+  ProfileInfoCubit({required this.profileInfoRepo})
+      : super(ProfileInfoInitialState());
+  final ProfileInfoRepo profileInfoRepo;
   UserModel? userModel;
-  static UserInfoCubit get(context) => BlocProvider.of(context);
+  static ProfileInfoCubit get(context) => BlocProvider.of(context);
 
-  Future<void> createNewUser({required UserModel user}) async {
-    emit(UserInfoLoadingState());
-    var result = await userInfoRepo.createNewUser(userModel: user);
+  Future<void> createNewUserProfile({required UserModel user}) async {
+    emit(ProfileInfoLoadingState());
+    var result = await profileInfoRepo.createNewUserProfile(userModel: user);
     result.fold((errorStatus) {
       var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorStatus);
-      emit(UserInfoFailureState(errorMsg: errorMsg));
+      emit(ProfileInfoFailureState(errorMsg: errorMsg));
     }, (userModel) {
       this.userModel = user = userModel;
-      emit(UserInfoSuccessfulState(userModel: userModel));
+      emit(ProfileInfoCreatedState(userModel: userModel));
     });
   }
 
-  getUserLocalInfo() {
-    emit(UserInfoSuccessfulState(userModel: UserModel()));
-  }
-
-  Future<void> getUserInfo() async {
-    emit(UserInfoLoadingState());
-    var result = await userInfoRepo.retrieveUserInfoFromRemote();
+  Future<void> fetchUserProfileInfo() async {
+    emit(ProfileInfoLoadingState());
+    var result = await profileInfoRepo.fetchUserProfileInfo();
     result.fold((errorStatus) {
       var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorStatus);
-      emit(UserInfoFailureState(errorMsg: errorMsg));
+      emit(ProfileInfoFailureState(errorMsg: errorMsg));
     }, (userModel) {
       this.userModel = userModel;
-      emit(UserInfoSuccessfulState(userModel: userModel));
+      emit(ProfileInfoFetchedState(userModel: userModel));
     });
   }
 }

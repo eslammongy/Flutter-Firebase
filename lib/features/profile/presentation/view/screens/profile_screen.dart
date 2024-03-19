@@ -11,8 +11,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    var userModel = UserInfoCubit.get(context).userModel;
-    return BlocConsumer<UserInfoCubit, UserInfoState>(
+    var userModel = ProfileInfoCubit.get(context).userModel;
+    return BlocConsumer<ProfileInfoCubit, ProfileInfoStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Column(

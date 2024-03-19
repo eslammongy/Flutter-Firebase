@@ -18,10 +18,10 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final passwordTxtController = TextEditingController();
     final emailTxtController = TextEditingController();
-    final userInfoCubit = UserInfoCubit.get(context);
-    return BlocConsumer<UserInfoCubit, UserInfoState>(
+    final userInfoCubit = ProfileInfoCubit.get(context);
+    return BlocConsumer<ProfileInfoCubit, ProfileInfoStates>(
       listener: (context, state) {
-        if (state is UserInfoSuccessfulState) {
+        if (state is ProfileInfoCreatedState) {
           Future(() async {
             await UserPref.keepUserAuthenticated(isLogged: true)
                 .then((value) async {
@@ -29,7 +29,7 @@ class SignInScreen extends StatelessWidget {
             });
           });
         }
-        if (state is UserInfoFailureState) {
+        if (state is ProfileInfoFailureState) {
           displaySnackBar(context, state.errorMsg);
         }
       },
@@ -71,7 +71,7 @@ class SignInScreen extends StatelessWidget {
                         }
                         if (state is SignInWithGoogleSuccessState) {
                           await userInfoCubit
-                              .createNewUser(user: state.userModel)
+                              .createNewUserProfile(user: state.userModel)
                               .then((value) async {
                             await _keepUserLoggedIn(context);
                           });
@@ -101,7 +101,9 @@ class SignInScreen extends StatelessWidget {
   }
 
   Future<void> _getUserInfo(BuildContext context) async {
-    await UserInfoCubit.get(context).getUserInfo().then((value) async {
+    await ProfileInfoCubit.get(context)
+        .fetchUserProfileInfo()
+        .then((value) async {
       await _keepUserLoggedIn(context);
     });
   }
