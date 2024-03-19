@@ -1,4 +1,4 @@
-part of 'user_info_cubit.dart';
+part of 'profile_info_cubit.dart';
 
 abstract class ProfileInfoStates {}
 

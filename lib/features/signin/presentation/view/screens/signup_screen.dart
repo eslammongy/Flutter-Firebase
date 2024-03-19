@@ -7,7 +7,7 @@ import 'package:flutter_firebase/core/utils/user_pref.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
-import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
+import 'package:flutter_firebase/features/profile/presentation/view_model/profile_info_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_button.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/custom_text_input_filed.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/login_screen_intro_section.dart';

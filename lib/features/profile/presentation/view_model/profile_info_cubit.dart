@@ -3,7 +3,7 @@ import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
 import 'package:flutter_firebase/features/profile/data/repos/profile_info_repo.dart';
 
-part 'user_info_state.dart';
+part 'profile_info_states.dart';
 
 class ProfileInfoCubit extends Cubit<ProfileInfoStates> {
   ProfileInfoCubit({required this.profileInfoRepo})

@@ -7,8 +7,8 @@ import 'package:flutter_firebase/core/utils/user_pref.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/signin_from.dart';
-import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/sign_in_options.dart';
+import 'package:flutter_firebase/features/profile/presentation/view_model/profile_info_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/login_screen_intro_section.dart';
 
 class SignInScreen extends StatelessWidget {

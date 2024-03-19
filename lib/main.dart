@@ -10,7 +10,7 @@ import 'package:flutter_firebase/features/signin/data/repos/signin_repo.dart';
 import 'package:flutter_firebase/core/utils/services_locator.dart' as injectable;
 import 'package:flutter_firebase/features/profile/data/repos/profile_info_repo.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
-import 'package:flutter_firebase/features/profile/presentation/view_model/user_info_cubit.dart';
+import 'package:flutter_firebase/features/profile/presentation/view_model/profile_info_cubit.dart';
     
    
 
