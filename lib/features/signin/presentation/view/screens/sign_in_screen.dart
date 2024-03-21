@@ -7,9 +7,9 @@ import 'package:flutter_firebase/core/utils/user_pref.dart';
 import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_firebase/features/signin/presentation/view_model/signin_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/signin_from.dart';
-import 'package:flutter_firebase/features/signin/presentation/view/widgets/sign_in_options.dart';
 import 'package:flutter_firebase/features/profile/presentation/view_model/profile_info_cubit.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/login_screen_intro_section.dart';
+import 'package:flutter_firebase/features/signin/presentation/view/widgets/signin_with_social_accounts.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -91,7 +91,7 @@ class SignInScreen extends StatelessWidget {
                       },
                       child: const SizedBox(),
                     ),
-                    const SignInOptions()
+                    const SignInWithSocialAccounts()
                   ]),
             ),
           ),

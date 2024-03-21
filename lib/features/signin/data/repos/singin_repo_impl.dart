@@ -110,7 +110,7 @@ class SignInRepoImplementation implements SignInRepo {
   Future<Either<AuthExceptionsTypes, bool>> submitUserPhoneNumber({
     required String phoneNumber,
     required Function(String verifyCode) setVerificationCode,
-    required Function() verificationFailed,
+    required Function(FirebaseAuthException authException) verificationFailed,
   }) async {
     try {
       await firebaseAuth.verifyPhoneNumber(
@@ -123,7 +123,7 @@ class SignInRepoImplementation implements SignInRepo {
         codeAutoRetrievalTimeout: (String verificationId) {
           setVerificationCode(verificationId);
         },
-        verificationFailed: verificationFailed(),
+        verificationFailed: verificationFailed,
       );
       return right(true);
     } on FirebaseAuthException catch (error) {

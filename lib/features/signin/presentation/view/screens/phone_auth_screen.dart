@@ -79,8 +79,6 @@ class PhoneAuthScreen extends StatelessWidget {
                             dialogSize: Size(300, 60.h),
                             onChanged: (value) {
                               countryCode = value.dialCode!.trim();
-                              debugPrint(
-                                  "Country Code${value.dialCode!.trim()}");
                             },
                           ),
                           Expanded(
@@ -113,6 +111,8 @@ class PhoneAuthScreen extends StatelessWidget {
                           } else {
                             final String phoneWithCountryCode =
                                 "$countryCode${phoneNumController.value.text}";
+                            debugPrint(
+                                "Submitted phone number->$phoneWithCountryCode");
                             await SignInCubit.get(context)
                                 .submitUserPhoneNumber(phoneWithCountryCode);
                           }

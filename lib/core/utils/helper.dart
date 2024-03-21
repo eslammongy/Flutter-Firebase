@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase/core/constants/app_assets.dart';
 
 /// this is the default box shadow for the card items
-final defBoxShadows = [
-  BoxShadow(
-    color: const Color(0xFF000000).withOpacity(0.8),
-    blurRadius: 1,
-    spreadRadius: 0,
-    offset: const Offset(2, 2), // vertical shadow distance
-  ),
-];
+get defBoxShadows => [
+      BoxShadow(
+        color: const Color(0xFF000000).withOpacity(0.8),
+        blurRadius: 1,
+        spreadRadius: 0,
+        offset: const Offset(2, 2), // vertical shadow distance
+      ),
+    ];
 
 /// define the public rounded radius in all project
-final publicRoundedRadius = BorderRadius.circular(14);
+get publicRoundedRadius => BorderRadius.circular(14);
 
 /// displaying a customized snackbar
 void displaySnackBar(BuildContext context, String msg) {
@@ -31,6 +31,10 @@ void displaySnackBar(BuildContext context, String msg) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
+/// Shows a loading dialog in the given [BuildContext].
+///
+/// The [context] parameter is the [BuildContext] in which the dialog is shown.
+/// This function does not return anything.
 void showLoadingDialog(BuildContext context) {
   showDialog(
       useSafeArea: true,
@@ -62,12 +66,11 @@ AlertDialog generateAlertDialog() {
   );
 }
 
+/// Checks if the given [value] is a valid email address.
+/// The [value] parameter should be a string representing the email address to validate.
+/// Returns `true` if the [value] is a valid email address, `false` otherwise.
 bool isValidEmail(String value) {
   const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
   RegExp regExp = RegExp(pattern);
   return regExp.hasMatch(value);
 }
-
-///default size height for icons box
-const double iconBoxH = 42;
-const double iconBoxW = 42;

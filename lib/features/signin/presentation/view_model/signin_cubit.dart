@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_firebase/core/errors/exp_enum.dart';
 import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/signin/data/repos/signin_repo.dart';
 import 'package:flutter_firebase/features/profile/data/models/user_model.dart';
@@ -78,9 +77,9 @@ class SignInCubit extends Cubit<SignInStates> {
         verificationId = verifyCode;
         emit(PhoneNumberSubmittedState());
       },
-      verificationFailed: () {
-        final errorMsg = AuthExceptionHandler.generateExceptionMessage(
-            AuthExceptionsTypes.authInvalidContinueUri);
+      verificationFailed: (authException) {
+        final errorMsg =
+            AuthExceptionHandler.generateExceptionMessage(authException);
         emit(SignInGenericFailureState(errorMsg));
       },
     );

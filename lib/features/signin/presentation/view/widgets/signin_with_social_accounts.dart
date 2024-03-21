@@ -6,8 +6,8 @@ import 'package:flutter_firebase/core/utils/app_routes.dart';
 import 'package:flutter_firebase/core/constants/app_assets.dart';
 import 'package:flutter_firebase/features/signin/presentation/view/widgets/build_login_option_btn.dart';
 
-class SignInOptions extends StatelessWidget {
-  const SignInOptions({
+class SignInWithSocialAccounts extends StatelessWidget {
+  const SignInWithSocialAccounts({
     Key? key,
   }) : super(key: key);
 
@@ -83,7 +83,7 @@ class SignInOptions extends StatelessWidget {
               btnText: "SignIn With Phone Number",
               signInOption: SignInOption.phone,
               onPressed: () async {
-                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
+                GoRouter.of(context).push(AppRouter.verifyingPhoneScreen);
               },
             ),
             const SizedBox(
