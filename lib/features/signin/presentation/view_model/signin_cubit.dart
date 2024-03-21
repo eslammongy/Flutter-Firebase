@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase/core/errors/auth_exceptions_handler.dart';
 import 'package:flutter_firebase/features/signin/data/repos/signin_repo.dart';
@@ -9,7 +10,6 @@ class SignInCubit extends Cubit<SignInStates> {
 
   static SignInCubit get(context) => BlocProvider.of(context);
   final SignInRepo signInRepo;
-  String? verificationId;
 
   Future<void> signInWithGoogleAccount() async {
     emit(SignInLoadingState());
@@ -74,8 +74,8 @@ class SignInCubit extends Cubit<SignInStates> {
     await signInRepo.submitUserPhoneNumber(
       phoneNumber: phoneNumber,
       setVerificationCode: (verifyCode) {
-        verificationId = verifyCode;
-        emit(PhoneNumberSubmittedState());
+        debugPrint("#submitUserPhoneNumber verificationId: $verifyCode");
+        emit(PhoneNumberSubmittedState(verificationId: verifyCode));
       },
       verificationFailed: (authException) {
         final errorMsg =
@@ -85,14 +85,15 @@ class SignInCubit extends Cubit<SignInStates> {
     );
   }
 
-  Future<void> signInWithPhoneNumber(String otpCode) async {
+  Future<void> signInWithPhoneNumber(
+      String otpCode, String verificationId) async {
     emit(SignInLoadingState());
-    if (verificationId == null) {
-      return;
-    }
+
+    debugPrint(
+        "Verify Code:: verificationId: $verificationId--otpCode: $otpCode");
     var result = await signInRepo.signInWithPhoneNumber(
       otpCode: otpCode,
-      verificationId: verificationId!,
+      verificationId: verificationId,
     );
     result.fold((errorCode) {
       var errorMsg = AuthExceptionHandler.generateExceptionMessage(errorCode);

@@ -26,7 +26,8 @@ class PhoneAuthScreen extends StatelessWidget {
         if (state is PhoneNumberSubmittedState) {
           // pop the loading dialog
           GoRouter.of(context).pop();
-          GoRouter.of(context).pushReplacement(AppRouter.verifyingPhoneScreen);
+          GoRouter.of(context).pushReplacement(AppRouter.verifyingPhoneScreen,
+              extra: state.verificationId);
         }
         if (state is SignInGenericFailureState) {
           // pop the loading dialog
@@ -111,8 +112,7 @@ class PhoneAuthScreen extends StatelessWidget {
                           } else {
                             final String phoneWithCountryCode =
                                 "$countryCode${phoneNumController.value.text}";
-                            debugPrint(
-                                "Submitted phone number->$phoneWithCountryCode");
+
                             await SignInCubit.get(context)
                                 .submitUserPhoneNumber(phoneWithCountryCode);
                           }

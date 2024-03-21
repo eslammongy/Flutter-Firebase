@@ -83,7 +83,7 @@ class SignInWithSocialAccounts extends StatelessWidget {
               btnText: "SignIn With Phone Number",
               signInOption: SignInOption.phone,
               onPressed: () async {
-                GoRouter.of(context).push(AppRouter.verifyingPhoneScreen);
+                GoRouter.of(context).push(AppRouter.phoneAuthScreen);
               },
             ),
             const SizedBox(

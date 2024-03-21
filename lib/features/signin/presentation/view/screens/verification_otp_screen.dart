@@ -40,11 +40,9 @@ class VerificationOtpScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        SignInCubit.get(context).verificationId = verifyId;
-
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: theme.scaffoldBackgroundColor,
+            backgroundColor: theme.colorScheme.background,
             title: Text(
               "Verification Otp",
               style: theme.textTheme.titleLarge,
@@ -81,7 +79,8 @@ class VerificationOtpScreen extends StatelessWidget {
                     hapticFeedbackType: HapticFeedbackType.lightImpact,
                     onCompleted: (code) {
                       showLoadingDialog(context);
-                      SignInCubit.get(context).signInWithPhoneNumber(code);
+                      SignInCubit.get(context)
+                          .signInWithPhoneNumber(code, verifyId);
                     },
                     cursor: Column(
                       mainAxisAlignment: MainAxisAlignment.end,

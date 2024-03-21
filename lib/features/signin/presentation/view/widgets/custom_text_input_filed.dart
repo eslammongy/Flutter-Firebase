@@ -47,7 +47,7 @@ class CustomTextInputField extends StatelessWidget {
           textAlign: TextAlign.start,
           textAlignVertical: TextAlignVertical.center,
           controller: textEditingController,
-          style: theme.textTheme.bodyMedium,
+          style: theme.textTheme.bodyLarge,
           decoration: InputDecoration(
             hintStyle: theme.textTheme.bodyMedium
                 ?.copyWith(color: theme.colorScheme.surfaceTint),

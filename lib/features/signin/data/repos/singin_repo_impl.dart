@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -118,6 +119,7 @@ class SignInRepoImplementation implements SignInRepo {
         verificationCompleted: (credential) async {},
         timeout: const Duration(seconds: 30),
         codeSent: (verificationId, reSendCode) {
+          debugPrint("SignIn Repo verification Code: $verificationId");
           setVerificationCode(verificationId);
         },
         codeAutoRetrievalTimeout: (String verificationId) {

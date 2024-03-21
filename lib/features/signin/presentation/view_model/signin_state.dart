@@ -26,7 +26,11 @@ class SignInWithGoogleSuccessState extends SignInStates {
 
 class ResetPasswordSuccessState extends SignInStates {}
 
-class PhoneNumberSubmittedState extends SignInStates {}
+class PhoneNumberSubmittedState extends SignInStates {
+  final String verificationId;
+
+  PhoneNumberSubmittedState({required this.verificationId});
+}
 
 class PhoneOtpCodeVerifiedState extends SignInStates {
   final UserModel userModel;
